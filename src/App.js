@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
-
+import logo from "./logo.svg";
+import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import Home from "./Page/Home";
+import BookList from "./Page/BookList";
+import BookDetail from "./Page/Bookdetail";
+import { books } from "./data";
+import { useState } from "react";
+import Search from "./component/Search";
 function App() {
+  const [booksList, setBookslist] = useState(books);
+  const changeText = (e) => {
+    const filteredBook = books.filter(
+      (book) => book.title.toLowerCase().startsWith(e.target.value) //includes
+    );
+    setBookslist(filteredBook);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Search handleChange={changeText} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/booklist" element={<BookList books={booksList} />} />
+        <Route path="/books/:id" element={<BookDetail books={books} />} />
+      </Routes>
+    </>
   );
 }
 
